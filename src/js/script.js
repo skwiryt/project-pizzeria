@@ -70,6 +70,7 @@
     },
     cart: {
       defaultDeliveryFee: 20,
+      inputLength: 10,
     },
     db: {
       url: '//localhost:3131',
@@ -218,6 +219,7 @@
     addToCart() {
       const thisProduct = this;
       app.cart.add(thisProduct.prepareCartProduct());
+      thisProduct.amountWidget.setValue(settings.amountWidget.defaultValue);
     }
 
     prepareCartProduct() {
@@ -352,6 +354,12 @@
         event.preventDefault();
         thisCart.sendOrder();
       });
+      thisCart.dom.address.addEventListener('change', () => {
+        thisCart.formValidation();
+      });
+      thisCart.dom.phone.addEventListener('change', () => {
+        thisCart.formValidation();
+      });
     }
 
     add(menuProduct) {
@@ -376,7 +384,7 @@
         thisCart.subtotalPrice += p.price;
       });
       thisCart.totalPrice = thisCart.totalNumber == 0 ? 0 : deliveryFee + thisCart.subtotalPrice;
-      thisCart.dom.deliveryFee.innerHTML = deliveryFee;
+      thisCart.dom.deliveryFee.innerHTML = thisCart.totalNumber == 0 ? 0 : deliveryFee;
       thisCart.dom.subtotalPrice.innerHTML = thisCart.subtotalPrice;
       thisCart.dom.totalPriceElems.forEach((e) => e.innerHTML = thisCart.totalPrice);
       thisCart.dom.totalNumber.innerHTML = thisCart.totalNumber;
@@ -412,11 +420,51 @@
         },
         body: JSON.stringify(payload),
       };
-      
-      fetch(url, options)
-        .then((response) => response.json())
-        .then((parsedResponse) => console.log('parsed response', parsedResponse));
+      if (thisCart.formValidation()) {
+        fetch(url, options)
+          .then((response) => response.json())
+          .then((parsedResponse) => { 
+            console.log('parsed response', parsedResponse);
+            thisCart.products.forEach((p) => p.remove());
+            thisCart.clearForm();
+          });
+      }
+      else {
+        console.log('not valid order');
+      }
+    }
+    clearForm() {
+      const thisCart = this;
+      thisCart.dom.address.value = '';
+      thisCart.dom.phone.value = '';
+    }
 
+    formValidation() {
+      const thisCart = this;
+      let valid = true;
+      if (thisCart.dom.address.value.length >= settings.cart.inputLength) {
+        valid = valid && true;
+        thisCart.dom.address.classList.remove('error');
+      }
+      else {
+        valid = false;
+        thisCart.dom.address.classList.add('error');
+      }
+      if (thisCart.dom.phone.value.length >= settings.cart.inputLength) {
+        valid = valid && true;
+        thisCart.dom.phone.classList.remove('error');
+      }
+      else {
+        valid = false;
+        thisCart.dom.phone.classList.add('error');
+      }
+      if (thisCart.subtotalPrice > 0) {
+        valid = valid && true;
+      }
+      else {
+        valid = false;
+      }
+      return valid;
     }
   }
   class CartProduct {
