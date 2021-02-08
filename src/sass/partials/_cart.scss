@@ -40,7 +40,7 @@
   }
 
   &__total-price {
-    color: $color-dark;
+    color: $color-dark;    
   }
 
   &__content {
@@ -62,7 +62,7 @@
       input {
         margin: 0;
         width: ($base-size * 2);
-        height: ($base-size * 2);
+        height: ($base-size * 2);        
       }
 
       &:hover .btn-quantity--lt {
@@ -156,4 +156,18 @@
 
   }
 
+}
+
+.cart__total-price strong, 
+.cart__order-total .cart__order-price-sum strong,
+.cart__order-subtotal .cart__order-price-sum strong,
+input.amount,
+.cart__product-price {
+ 
+  transition: opacity 1s;
+}
+
+.just-changed {
+  opacity: 0.5 !important;
+  transition: none !important;
 }

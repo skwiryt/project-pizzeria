@@ -83,7 +83,13 @@
     menuProduct: Handlebars.compile(document.querySelector(select.templateOf.menuProduct).innerHTML),
     cartProduct: Handlebars.compile(document.querySelector(select.templateOf.cartProduct).innerHTML),
   };
-
+  
+  const appService = {
+    signalChanged: (element) =>{
+      element.classList.toggle('just-changed');
+      setTimeout(() => element.classList.toggle('just-changed'), 40);
+    },
+  };
   class Product {
     constructor(id, data) {
       const thisProduct = this;
@@ -313,6 +319,7 @@
       const thisWidget = this;
       const event = new Event('updated', { bubbles: true });
       thisWidget.element.dispatchEvent(event);
+      appService.signalChanged(thisWidget.input);
     }
   }
   class Cart {
@@ -346,6 +353,7 @@
       });
       thisCart.dom.productList.addEventListener('updated', () => {
         thisCart.update();
+        thisCart.signalChanged();
       });
       thisCart.dom.productList.addEventListener('remove', (event) => {
         thisCart.remove(event.detail.cartProduct);
@@ -466,6 +474,13 @@
       }
       return valid;
     }
+
+    signalChanged() {
+      const thisCart = this;
+      appService.signalChanged(thisCart.dom.subtotalPrice);
+      thisCart.dom.totalPriceElems.forEach((e) => appService.signalChanged(e));      
+    }
+    
   }
   class CartProduct {
     constructor(menuProduct, element) {
@@ -506,7 +521,8 @@
       thisCartProduct.amountWidget.element.addEventListener('updated', () => { 
         thisCartProduct.amount = thisCartProduct.amountWidget.value;
         thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amountWidget.value;
-        thisCartProduct.dom.price.textContent = thisCartProduct.price;        
+        thisCartProduct.dom.price.textContent = thisCartProduct.price; 
+        appService.signalChanged(thisCartProduct.dom.price);      
       }); 
     }
 
@@ -565,7 +581,7 @@
       console.log('*** App starting ***');
 
       thisApp.initData();
-      thisApp.initCart();
+      thisApp.initCart(); 
     },
 
     initCart: function() {
