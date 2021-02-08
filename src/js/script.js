@@ -85,10 +85,10 @@
   };
   
   const appService = {
-    signalChanged: (element) =>{
+    signalChanged: (element) => {
       element.classList.toggle('just-changed');
       setTimeout(() => element.classList.toggle('just-changed'), 40);
-    },
+    },  
   };
   class Product {
     constructor(id, data) {
@@ -328,7 +328,7 @@
 
       thisCart.products = [];
       thisCart.getElements(element);
-      thisCart.initActions();
+      thisCart.initActions();      
     }
 
     getElements(element) {
@@ -368,6 +368,7 @@
       thisCart.dom.phone.addEventListener('change', () => {
         thisCart.formValidation();
       });
+      thisCart.hideOnClickOutside();
     }
 
     add(menuProduct) {
@@ -480,6 +481,18 @@
       appService.signalChanged(thisCart.dom.subtotalPrice);
       thisCart.dom.totalPriceElems.forEach((e) => appService.signalChanged(e));      
     }
+    hideOnClickOutside() {
+      const thisCart = this;
+      const outsideClickListener = event => {
+        if (!thisCart.dom.wrapper.contains(event.target)) {
+          thisCart.dom.wrapper.classList.remove(classNames.cart.wrapperActive);
+        }
+      };
+      //if many of such elements (menues for example) than this function should go to appService
+      //and listenner below would have to be removed each time the element becomes hidden, 
+      //both in above outsideClickListener function and also in any other toggle action.
+      document.addEventListener('click', outsideClickListener);
+    }   
     
   }
   class CartProduct {
