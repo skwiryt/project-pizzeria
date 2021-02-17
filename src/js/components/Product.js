@@ -46,7 +46,7 @@ class Product {
   initAmountWidget() {
     const thisProduct = this;
     thisProduct.amountWidget = new AmountWidget(thisProduct.dom.amountWidgetElem);
-    thisProduct.amountWidget.element.addEventListener('updated', () => { thisProduct.processOrder();}); 
+    thisProduct.amountWidget.dom.wrapper.addEventListener('updated', () => { thisProduct.processOrder();}); 
   }
 
   initAccordion() {
@@ -137,8 +137,7 @@ class Product {
 
   addToCart() {
     const thisProduct = this;
-    //app.cart.add(thisProduct.prepareCartProduct());
-    thisProduct.amountWidget.setValue(settings.amountWidget.defaultValue);
+    //app.cart.add(thisProduct.prepareCartProduct());    
     const event = new CustomEvent('add-to-cart', {
       bubbles: true,
       detail: {
@@ -146,6 +145,7 @@ class Product {
       }
     });
     thisProduct.dom.wrapper.dispatchEvent(event);
+    thisProduct.amountWidget.setValue(settings.amountWidget.defaultValue);
 
   }
 
