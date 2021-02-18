@@ -17,7 +17,7 @@
 }
 
 .booking-wrapper {
-  margin: ($base-size * 3.5) auto;
+  margin: ($base-size * 3.5 + 17*$base-size) auto;
   padding: ($base-size * 6) ($base-size * 4);
   background: $color-light;
   border-bottom: 1px solid lighten($color-dark, 70%);
