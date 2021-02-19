@@ -170,8 +170,11 @@
         top: 0;
         background: $color-dark;
         opacity: 0.4;
-      }
-
+      }    
+    }
+    
+    &.pre-booked {
+      background-color: $color-success;
     }
   }
 
