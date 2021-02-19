@@ -3,12 +3,12 @@ import BaseWidget from './BaseWidget.js';
 
 class AmountWidget extends BaseWidget {
 
-  constructor(element) {
-    super(element, settings.amountWidget.defaultValue);
+  constructor(element, initialValue = settings.amountWidget.defaultValue) {
+    super(element, initialValue);
 
     const thisWidget = this;
     thisWidget.getElements(element);
-    thisWidget.setValue(settings.amountWidget.defaultValue);
+    thisWidget.setValue(initialValue);
     thisWidget.initActions();
   }
   getElements() {
@@ -18,8 +18,7 @@ class AmountWidget extends BaseWidget {
     thisWidget.dom.linkIncrease = thisWidget.dom.wrapper.querySelector(select.widgets.amount.linkIncrease);
     
   } 
-
-
+  
   isValid(value) {
     return !isNaN(value) 
       && value >= settings.amountWidget.defaultMin 

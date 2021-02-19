@@ -1,4 +1,3 @@
-import appService from '../appService.js';
 
 class BaseWidget {
   constructor(wrapperElement, initialValue) {
@@ -42,8 +41,7 @@ class BaseWidget {
   announce() {
     const thisWidget = this;
     const event = new Event('updated', { bubbles: true });
-    thisWidget.dom.wrapper.dispatchEvent(event);
-    appService.signalChanged(thisWidget.dom.input);
+    thisWidget.dom.wrapper.dispatchEvent(event); 
   }
 }
 export default BaseWidget;

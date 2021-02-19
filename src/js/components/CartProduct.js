@@ -37,13 +37,13 @@ class CartProduct {
   }
   initAmountWidget() {
     const thisCartProduct = this;
-    thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidgetElem);
+    thisCartProduct.amountWidget = new AmountWidget(thisCartProduct.dom.amountWidgetElem, thisCartProduct.amount);
     thisCartProduct.amountWidget.dom.wrapper.addEventListener('updated', () => { 
       thisCartProduct.amount = thisCartProduct.amountWidget.value;
       thisCartProduct.price = thisCartProduct.priceSingle * thisCartProduct.amountWidget.value;
       thisCartProduct.dom.price.textContent = thisCartProduct.price; 
       appService.signalChanged(thisCartProduct.dom.price);      
-    }); 
+    });   
   }
 
   remove() {

@@ -1,6 +1,7 @@
 import utils from '../utils.js';
 import {select, templates, classNames, settings} from '../settings.js';
 import AmountWidget from './AmountWidget.js';
+import appService from '../appService.js';
 
 
 class Product {
@@ -46,7 +47,10 @@ class Product {
   initAmountWidget() {
     const thisProduct = this;
     thisProduct.amountWidget = new AmountWidget(thisProduct.dom.amountWidgetElem);
-    thisProduct.amountWidget.dom.wrapper.addEventListener('updated', () => { thisProduct.processOrder();}); 
+    thisProduct.amountWidget.dom.wrapper.addEventListener('updated', () => { 
+      thisProduct.processOrder();
+      appService.signalChanged(thisProduct.amountWidget.dom.input);
+    }); 
   }
 
   initAccordion() {
