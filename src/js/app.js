@@ -2,6 +2,7 @@ import {settings, select, classNames} from './settings.js';
 import Product from './components/Product.js';
 import Cart from './components/Cart.js';
 import Booking from './components/Booking.js';
+import Home from './components/Home.js';
 
 
 const app = {
@@ -10,6 +11,9 @@ const app = {
     const thisApp = this;
     thisApp.pages = document.querySelector(select.containerOf.pages).children;
     thisApp.navLinks = document.querySelectorAll(select.nav.links);
+    thisApp.navBoxes = document.querySelectorAll(select.nav.boxes);
+    thisApp.navItems = [...thisApp.navLinks, ...thisApp.navBoxes];
+    console.log('navItems', thisApp.navBoxes);
     const idFromHash = window.location.hash.replace('#/', '');
 
     let pageMatchinHash = thisApp.pages[0];
@@ -20,11 +24,11 @@ const app = {
       } 
     }
     thisApp.activatePage(pageMatchinHash.id);
-    for (let link of thisApp.navLinks) {
+    for (let link of thisApp.navItems) {
       link.addEventListener('click', function(event) {
         const clickedElement = this;
         event.preventDefault();
-
+        console.log('clickedElement', this);
         /* get page id form href attribute */        
         const id = clickedElement.getAttribute('href').replace('#', '');
         thisApp.activatePage(id);
@@ -78,10 +82,19 @@ const app = {
   init: function() {
     const thisApp = this;
     console.log('*** App starting ***');
+    thisApp.initHome();
     thisApp.initPages();
     thisApp.initData();
     thisApp.initCart();
     thisApp.initBooking();
+    
+  },
+
+  initHome: function() {
+    const thisApp = this;
+
+    const homeElem = document.querySelector(select.containerOf.home);
+    thisApp.home = new Home(homeElem);
   },
 
   initCart: function() {
