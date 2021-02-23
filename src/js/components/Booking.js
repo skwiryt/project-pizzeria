@@ -90,8 +90,10 @@ class Booking {
       }     
     } 
     
-    //console.log('thisBooking.booked', thisBooking.booked);
+    // console.log('thisBooking.booked', thisBooking.booked);
+    // console.log('datePickerValue', thisBooking.datePicker.value);
     thisBooking.upDateDOM();
+    thisBooking.upDateSliderStyle(thisBooking.datePicker.value);
   }
 
   makeBooked(date, hour, duration, table) {
@@ -167,10 +169,69 @@ class Booking {
     thisBooking.datePicker = new DatePicker(thisBooking.dom.datePicker);
     thisBooking.hourPicker = new HourPicker(thisBooking.dom.hourPicker);
 
-    thisBooking.dom.wrapper.addEventListener('updated', () => {
+    thisBooking.dom.wrapper.addEventListener('updated', (event) => {
       thisBooking.upDateDOM();
       thisBooking.resetBooking();
+      if (event.target == thisBooking.datePicker.dom.wrapper) {
+        thisBooking.upDateSliderStyle(thisBooking.datePicker.value);
+      }      
     });
+  }
+  upDateSliderStyle(date) {
+    const thisBooking = this;
+    const slideElem = document.querySelector(select.widgets.hourPicker.slider);
+    
+    slideElem.setAttribute('style', `background: linear-gradient(to right, ${thisBooking.getColorSpec(date)})`);
+  }
+  getColorSpec(date) {
+    const thisBooking = this; 
+    const getHourColor = (hourBookings) => {
+      if (typeof hourBookings == 'undefined') {
+        return settings.hourPicker.colors.free;
+      }
+      if (hourBookings.length  == settings.booking.maxTables) {
+        return settings.hourPicker.colors.busy;
+      }
+      if (hourBookings.length == settings.booking.maxTables - 1) {
+        return settings.hourPicker.colors.warn;
+      }
+      return settings.hourPicker.colors.free;
+    };
+    
+    const close = settings.hours.close;
+    const open = settings.hours.open;
+    const timeToPercent = (hour) => {      
+      const hourSpan = 100 / (close - open);      
+      return `${(hour - open) * hourSpan}%`;
+    };
+
+    
+    const dayBookings = thisBooking.booked[date];
+    if ( typeof dayBookings == 'undefined') {
+      return `${settings.hourPicker.colors.free} 0% 100%`;
+    }
+
+    let currentColor = '';
+    const colorDinamics = [];
+
+    for (let hour = open; hour < close; hour += 0.5) {
+      const hourColor = getHourColor(dayBookings[hour]);
+      if (hourColor != currentColor) {              
+        colorDinamics.push({        
+          color: hourColor,
+          startPoint: timeToPercent(hour),
+          endPoint: timeToPercent(hour + 0.5)
+        });
+        currentColor = hourColor;
+      }
+      else {
+        colorDinamics[colorDinamics.length - 1].endPoint = timeToPercent(hour + 0.5);
+      }
+    }
+
+    return colorDinamics
+      .map((item) => `${item.color} ${item.startPoint} ${item.endPoint}`)
+      .join(', ');
   }
 
   initPreBooking() {

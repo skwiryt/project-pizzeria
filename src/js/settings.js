@@ -40,6 +40,7 @@ export const select = {
       wrapper: '.hour-picker',
       input: 'input[type="range"]',
       output: '.output',
+      slider: '.rangeSlider',
     },
   },
   cart: {
@@ -108,7 +109,14 @@ export const settings = {
     defaultMax: 9,
   },
   datePicker: {
-    maxDaysInFuture: 14,
+    maxDaysInFuture: 14,    
+  },
+  hourPicker: {
+    colors: {
+      free: 'green',
+      warn: 'orange',
+      busy: 'red',
+    }
   },
   cart: {
     defaultDeliveryFee: 20,
@@ -116,6 +124,7 @@ export const settings = {
   },
   booking: {
     tableIdAttribute: 'data-table',
+    maxTables: 3,
   },
   db: {
     url: '//' + window.location.hostname + (window.location.hostname=='localhost' ? ':3131' : ''),
