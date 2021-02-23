@@ -300,6 +300,10 @@ class Booking {
       phone: thisBooking.dom.phone.value,
       address: thisBooking.dom.address.value,
     };
+    if (!payload.table) {
+      alert('You must pick a table');
+      return;
+    }
     const options = {
       method: 'POST',
       headers: {
