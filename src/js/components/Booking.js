@@ -90,8 +90,8 @@ class Booking {
       }     
     } 
     
-    // console.log('thisBooking.booked', thisBooking.booked);
-    // console.log('datePickerValue', thisBooking.datePicker.value);
+    console.log('thisBooking.booked', thisBooking.booked);
+    console.log('datePickerValue', thisBooking.datePicker.value);
     thisBooking.upDateDOM();
     thisBooking.upDateSliderStyle(thisBooking.datePicker.value);
   }
@@ -207,6 +207,8 @@ class Booking {
 
     
     const dayBookings = thisBooking.booked[date];
+    console.log('date', date);
+    console.log('dayBookings', dayBookings);
     if ( typeof dayBookings == 'undefined') {
       return `${settings.hourPicker.colors.free} 0% 100%`;
     }
@@ -310,6 +312,7 @@ class Booking {
       .then((booking) => {        
         thisBooking.makeBooked(booking.date, booking.hour, booking.duration, booking.table);
         thisBooking.upDateDOM();
+        thisBooking.upDateSliderStyle();
         thisBooking.resetBooking();
       });
   }
